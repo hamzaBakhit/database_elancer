@@ -1,0 +1,13 @@
+{
+  "login_title" : "أهلاً بك مجددا",
+  "login_subtitle": "أدخل الإيميل وكلمة المرور",
+  "login": "تسجيل دخول",
+  "email": "البريد",
+  "password": "كلمة المرور",
+  "confirm_logout_title": "تأكيد تسجيل الخروج",
+  "confirm_logout_content": "هل أنت متأكد",
+  "confirm": "تأكيد",
+  "cancel": "إلغاء",
+  "language_title": "تغيير اللغة",
+  "language_sub_title": "اختر اللغة المناسبة"
+}
