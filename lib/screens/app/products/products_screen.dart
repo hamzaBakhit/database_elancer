@@ -1,21 +1,23 @@
+import 'package:database_elancer/prefs/shared_pref_controller.dart';
+import 'package:database_elancer/utils/context_extinsion.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class ProductsScreen extends StatefulWidget {
+  const ProductsScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ProductsScreenState createState() => _ProductsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Screen'),
+        title: Text(context.localizations.products),
         actions: [
           IconButton(
             onPressed: () {
@@ -28,10 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      body: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: const Icon(Icons.shop),
+              title: const Text('Title'),
+              subtitle: const Text('Title'),
+              trailing: IconButton(
+                onPressed: ()=> Navigator.pushNamed(context, '/product_screen'),
+                icon: const Icon(Icons.delete),
+              ),
+            );
+          }),
     );
   }
 
-  void _confirmLogoutDialog() async{
+  void _confirmLogoutDialog() async {
     bool? result = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
@@ -48,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context,true);
+              Navigator.pop(context, true);
             },
             child: Text(
               AppLocalizations.of(context)!.confirm,
@@ -57,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context,false);
+              Navigator.pop(context, false);
             },
             child: Text(
               AppLocalizations.of(context)!.cancel,
@@ -68,8 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    if(result?? false){
-      Navigator.pushReplacementNamed(context, '/login_screen');
+    if (result ?? false) {
+      // bool cleared = await SharedPrefController().removeValueFor(PrefKeys.loggedIn.name);
+      bool cleared = await SharedPrefController().clear();
+      if (cleared) {
+        Navigator.pushReplacementNamed(context, '/login_screen');
+      }
     }
   }
 }

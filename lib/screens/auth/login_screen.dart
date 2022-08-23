@@ -1,9 +1,15 @@
+import 'package:database_elancer/database/controllers/user_db_controller.dart';
+import 'package:database_elancer/models/proccess_responce.dart';
+import 'package:database_elancer/prefs/shared_pref_controller.dart';
+import 'package:database_elancer/provider/languageProvider.dart';
 import 'package:database_elancer/utils/helpers.dart';
 import 'package:database_elancer/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:database_elancer/utils/context_extinsion.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,11 +22,14 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
   late TextEditingController _emailEditingController;
   late TextEditingController _passwordEditingController;
   bool _obscure = false;
-  String _language = 'en';
+  late String _language;
 
   @override
   void initState() {
     super.initState();
+    _language =
+        SharedPrefController().getValueFor<String>(PrefKeys.language.name) ??
+            'en';
     _emailEditingController = TextEditingController();
     _passwordEditingController = TextEditingController();
   }
@@ -113,83 +122,108 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 style: GoogleFonts.cairo(),
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(AppLocalizations.of(context)!.new_account_message),
+                TextButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/register_screen'),
+                  child: Text(
+                    AppLocalizations.of(context)!.create_account,
+                    style: GoogleFonts.poppins(color: Colors.blue),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _showLanguageBottomSheet() {
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-          ),
+  void _showLanguageBottomSheet() async {
+    String? langCode = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
         ),
-        clipBehavior: Clip.antiAlias,
-        builder: (context) {
-          return BottomSheet(
-              onClosing: () {},
-              builder: (context) {
-                return StatefulBuilder(
-                  builder: (context,setState){
-                    return  Padding(
-                      padding:
+      ),
+      clipBehavior: Clip.antiAlias,
+      builder: (context) {
+        return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.language_title,
-                            style: GoogleFonts.cairo(
-                                fontSize: 16.sp, color: Colors.black),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.language_sub_title,
-                            style: GoogleFonts.cairo(
-                                fontSize: 13.sp, color: Colors.black45),
-                          ),
-                          Divider(),
-                          RadioListTile<String>(
-                              title: Text(
-                                'English',
-                                style: GoogleFonts.cairo(),
-                              ),
-                              value: 'en',
-                              groupValue: _language,
-                              onChanged: (String? value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _language = value;
-                                  });
-                                }
-                              }),
-                          RadioListTile<String>(
-                              title: Text(
-                                'العربية',
-                                style: GoogleFonts.cairo(),
-                              ),
-                              value: 'ar',
-                              groupValue: _language,
-                              onChanged: (String? value) {
-                                if (value != null) {
-                                  setState(() {
-                                    _language = value;
-                                  });
-                                }
-                              })
-                        ],
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.language_title,
+                        style: GoogleFonts.cairo(
+                            fontSize: 16.sp, color: Colors.black),
                       ),
-                    );
-                  },
+                      Text(
+                        AppLocalizations.of(context)!.language_sub_title,
+                        style: GoogleFonts.cairo(
+                            fontSize: 13.sp, color: Colors.black45),
+                      ),
+                      Divider(),
+                      RadioListTile<String>(
+                          title: Text(
+                            'English',
+                            style: GoogleFonts.cairo(),
+                          ),
+                          value: 'en',
+                          groupValue: _language,
+                          onChanged: (String? value) {
+                            if (value != null) {
+                              setState(() {
+                                _language = value;
+                              });
+                              Navigator.pop(context, 'en');
+                            }
+                          }),
+                      RadioListTile<String>(
+                        title: Text(
+                          'العربية',
+                          style: GoogleFonts.cairo(),
+                        ),
+                        value: 'ar',
+                        groupValue: _language,
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            setState(() {
+                              _language = value;
+                            });
+                            Navigator.pop(context, 'ar');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 );
-              });
-        });
+              },
+            );
+          },
+        );
+      },
+    );
+
+    if (langCode != null) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Provider.of<LanguageProvider>(context, listen: false).changeLanguage();
+      });
+    }
   }
 
   void _performLogIn() {
@@ -205,7 +239,14 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
     return false;
   }
 
-  void _login() {
-    Navigator.pushReplacementNamed(context, '/home_screen');
+  Future<void> _login() async {
+    //CRITICAL: MUST NOT BE CALLED HERE..
+    ProcessResponse processResponse = await UserDbController().login(
+        email: _emailEditingController.text,
+        password: _passwordEditingController.text);
+    if(processResponse.success){
+      Navigator.pushReplacementNamed(context, '/products_screen');
+    }
+    context.showSnackBar(message: processResponse.message,error: !processResponse.success);
   }
 }

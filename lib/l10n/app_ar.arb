@@ -9,5 +9,20 @@
   "confirm": "تأكيد",
   "cancel": "إلغاء",
   "language_title": "تغيير اللغة",
-  "language_sub_title": "اختر اللغة المناسبة"
+  "language_sub_title": "اختر اللغة المناسبة",
+  "register":"إنشاء حساب",
+  "register_title": "إنشاء حساب جديد",
+  "register_subtitle": "أدخل البيانت أدناه",
+  "name": "الاسم",
+  "new_account_message": "ألا يوجد لديك حساب",
+  "create_account": "أنشئ حساب",
+  "products": "المنتجات",
+  "create_product": "إضافة منتج",
+  "update_product": "تحديث منتج",
+  "info": "ملعومات",
+  "price": "السعر",
+  "quantity": "الكمية",
+  "save": "حفظ",
+  "error_data": "أدخل البيانات المطلوبة"
+
 }

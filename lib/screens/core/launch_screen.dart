@@ -1,3 +1,4 @@
+import 'package:database_elancer/prefs/shared_pref_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +15,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/login_screen');
+      bool loggedIn =
+          SharedPrefController().getValueFor<bool>(PrefKeys.loggedIn.name) ??
+              false;
+      String route = loggedIn ? '/products_screen' : '/login_screen';
+      Navigator.pushReplacementNamed(context, route);
     });
   }
 

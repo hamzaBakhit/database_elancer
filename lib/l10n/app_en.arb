@@ -1,5 +1,5 @@
 {
-  "login_title" : "Welcome back...",
+  "login_title": "Welcome back...",
   "login_subtitle": "Enter email & password",
   "login": "Login",
   "email": "Email",
@@ -9,6 +9,19 @@
   "confirm": "Confirm",
   "cancel": "Cancel",
   "language_title": "Change language",
-  "language_sub_title": "choose suitable language"
-
+  "language_sub_title": "choose suitable language",
+  "register": "Register",
+  "register_title": "Create new account...",
+  "register_subtitle": "Enter info below",
+  "name": "Name",
+  "new_account_message": "Don't have an account?",
+  "create_account": "Create account",
+  "products": "Products",
+  "create_product": "Create product",
+  "update_product": "Update product",
+  "info": "Information",
+  "price": "Price",
+  "quantity": "Quantity",
+  "save": "Save",
+  "error_data": "Enter required data"
 }

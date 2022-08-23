@@ -13,10 +13,12 @@ mixin Helpers {
           message,
           style: GoogleFonts.cairo(),
         ),
-        backgroundColor: error? Colors.red.shade700: Colors.blue.shade700,
+        backgroundColor: error ? Colors.red.shade700 : Colors.blue.shade700,
         duration: Duration(seconds: 1),
         dismissDirection: DismissDirection.horizontal,
       ),
     );
   }
+
+
 }
